@@ -17,16 +17,33 @@ export const Api = axios.create({
 export default new Vuex.Store({
     state: {
         plants: [],
+        plantSpecies: [],
         showFooter: true,
     } as IPlantLogBookState,
     getters: {
         getPlantById: (state) => (id: string) => {
             return state.plants.find(p => p.id === id);
-        }
+        },
+        getPlantSpeciesById: (state) => (id: string) => {
+            console.debug('requesting plant species with id', id);
+            console.debug('plant species', state.plantSpecies);
+            return state.plantSpecies.find(ps => ps.id === id);
+        },
     },
     mutations: {
         setPlants(state, payload) {
             state.plants = payload;
+        },
+        setPlantLogs(state, payload) {
+            const plant = state.plants.find(p => p.id === payload.plantId);
+            if (undefined === plant) {
+                return;
+            }
+            plant.logs = payload.data;
+            state.plants = [...state.plants.filter(p => p.id !== plant.id), plant];
+        },
+        setPlantSpecies(state, payload) {
+            state.plantSpecies = payload;
         }
     },
     actions: {
@@ -35,7 +52,19 @@ export default new Vuex.Store({
                 .then(res => {
                     context.commit('setPlants', res.data);
                 })
-        }
+        },
+        async loadPlantSpecies(context) {
+            Api.get('plant-species')
+                .then(res => {
+                    context.commit('setPlantSpecies', res.data);
+                })
+        },
+        async loadPlantLogsForPlant(context, payload: { plantId: string }) {
+            Api.get(`plant/${payload.plantId}/plant-log`)
+                .then(res => {
+                    context.commit('setPlantLogs', {plantId: payload.plantId, data: res.data});
+                })
+        },
     },
     modules: {}
 })
