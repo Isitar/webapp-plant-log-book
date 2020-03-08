@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <dl>
-            <dt>Id</dt>
-            <dd>{{plant.id}}</dd>
-
-            <dt>Name</dt>
-            <dd>{{plant.name}}</dd>
-        </dl>
-    </div>
+    <main>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">{{plant.name}}</h1>
+            </div>
+        </section>
+    </main>
 </template>
 
 <script lang="ts">

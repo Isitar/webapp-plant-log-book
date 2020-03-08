@@ -58,5 +58,13 @@
 </script>
 
 <style lang="scss">
+    #app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
 
+        nav+* {
+            flex: 1 1 auto;
+        }
+    }
 </style>
