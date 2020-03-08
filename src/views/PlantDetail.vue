@@ -11,12 +11,14 @@
 </template>
 
 <script lang="ts">
-    export default {
+    import Vue from 'vue';
+
+    export default Vue.extend({
         name: 'PlantDetail',
         computed: {
             plant() {
                 return this.$store.getters.getPlantById(this.$route.params.id);
             }
         }
-    }
+    });
 </script>

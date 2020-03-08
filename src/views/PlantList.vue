@@ -1,36 +1,46 @@
 <template>
-    <table>
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="plant in plants" :key="plant.id">
-            <td>{{plant.id}}</td>
-            <td>{{plant.name}}</td>
-            <router-link :to="{ name: 'plantDetail', params: {id: plant.id } }">Detail: {{plant.id}}</router-link>
-        </tr>
-        </tbody>
-    </table>
+    <main>
+        <section class="section">
+            <div class="table-container">
+                <h1 class="title">Plant List</h1>
+                <table class="table is-striped is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Plant</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="plant in plants" :key="plant.id">
+                        <td>{{plant.name}}</td>
+                        <td align="right">
+                            <router-link :to="{ name: 'plantDetail', params: {id: plant.id } }">
+                                <span class="icon">
+                                    <font-awesome-icon icon="eye"/>
+                                </span>
+                            </router-link>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </template>
 
 <script lang="ts">
+    import Vue from 'vue';
     import {mapState} from "vuex";
+    import {IPlantLogBookState} from "@/store/IPlantLogBookState";
 
 
-
-    export default {
+    export default Vue.extend({
         name: 'PlantList',
-        computed: mapState({
-            plants: state => state.plants
+        computed: mapState<IPlantLogBookState>({
+            plants: (state: IPlantLogBookState) => state.plants,
         }),
         mounted(): void {
             this.$store.dispatch('loadPlants');
         }
-    }
+    });
 </script>
-
-<style src="./PlantList.scss" lang="scss"></style>

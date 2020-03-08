@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
+import {IPlantLogBookState} from "@/store/IPlantLogBookState";
 
 Vue.use(Vuex);
 
@@ -15,10 +16,11 @@ export const Api = axios.create({
 
 export default new Vuex.Store({
     state: {
-        plants: []
-    },
+        plants: [],
+        showFooter: true,
+    } as IPlantLogBookState,
     getters: {
-        getPlantById: (state) => (id: number) => {
+        getPlantById: (state) => (id: string) => {
             return state.plants.find(p => p.id === id);
         }
     },
