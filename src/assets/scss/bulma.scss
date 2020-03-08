@@ -29,7 +29,7 @@ $title-color: $primary;
 // @import "../../../node_modules/bulma/sass/components/panel";
 // @import "../../../node_modules/bulma/sass/components/tabs";
 
-// @import "../../../node_modules/bulma/sass/elements/box";
+@import "../../../node_modules/bulma/sass/elements/box";
 @import "../../../node_modules/bulma/sass/elements/button";
 @import "../../../node_modules/bulma/sass/elements/container";
 // @import "../../../node_modules/bulma/sass/elements/content";
@@ -38,7 +38,7 @@ $title-color: $primary;
 // @import "../../../node_modules/bulma/sass/elements/image";
 // @import "../../../node_modules/bulma/sass/elements/notification";
 // @import "../../../node_modules/bulma/sass/elements/other";
-// @import "../../../node_modules/bulma/sass/elements/progress";
+@import "../../../node_modules/bulma/sass/elements/progress";
 @import "../../../node_modules/bulma/sass/elements/table";
 // @import "../../../node_modules/bulma/sass/elements/tag";
 @import "../../../node_modules/bulma/sass/elements/title";
