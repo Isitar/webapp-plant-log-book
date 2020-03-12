@@ -8,7 +8,7 @@
                     <li class="level-item has-text-centered">
                         <div>
                             <p class="heading">Logs</p>
-                            <p class="title">{{plant.logs.length}}</p>
+                            <p class="title" v-if="plant.logs">{{plant.logs.length}}</p>
                         </div>
                     </li>
                     <li class="level-item has-text-centered">
@@ -23,14 +23,31 @@
                 </ul>
 
                 <h2 class="title">Logs</h2>
+
                 <button class="button" v-on:click="openModal()">Add Log</button>
+
                 <p class="content" v-if="!plant.logs || plant.logs.length === 0">No logs found</p>
-                <ul class="list is-hoverable">
-                    <li class="list-item" v-for="log in plant.logs" :key="log.id">{{log.log}}</li>
-                </ul>
+                <div class="table-container">
+                    <table class="table is-fullwidth">
+                        <colgroup>
+                            <col style="width: 10%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Typ</th>
+                            <th>Log</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="log in plant.logs" :key="log.id">
+                            <td>{{logTypeName(log.plantLogTypeId)}}</td>
+                            <td class="nl2br">{{log.log}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                <AddLogComponent :plant-id="plant.id" :show="showAddLogModal"></AddLogComponent>
-
+                <AddLogComponent :plant-id="plant.id"></AddLogComponent>
 
             </div>
             <div class="container">
@@ -45,12 +62,10 @@
     import {Plant} from "@/models/Plant";
     import {PlantSpecies} from "@/models/PlantSpecies";
     import AddLogComponent from '@/components/AddLogComponent.vue';
+    import {PlantLogType} from "@/models/PlantLogType";
 
     export default Vue.extend({
         name: 'PlantDetail',
-        data: () => {
-            return {showAddLogModal: false};
-        },
         computed: {
             plant(): Plant | null {
                 const plant = this.$store.getters.getPlantById(this.$route.params.id);
@@ -77,14 +92,21 @@
                     return null;
                 }
                 return plantSpecies;
-            }
-
+            },
         },
         methods: {
-            openModal: function() {
-                this.showAddLogModal = false;
-                this.showAddLogModal = true;
+            openModal: function () {
+                this.$store.commit('loadPlantLogTypes');
+                this.$store.commit('openAddPlantModal');
             },
+
+            logTypeName: function(id: string): string|null {
+                const plantLogType = this.$store.state.plantLogTypes.find((plt: PlantLogType) => plt.id === id);
+                if (undefined === plantLogType){
+                    return null;
+                }
+                return plantLogType.name;
+            }
         },
         components: {AddLogComponent}
     });

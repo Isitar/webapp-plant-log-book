@@ -18,19 +18,30 @@ export default new Vuex.Store({
     state: {
         plants: [],
         plantSpecies: [],
+        plantLogTypes: [],
         showFooter: true,
+        showMobileMenu: false,
+        showAddPlantModal: false
     } as IPlantLogBookState,
     getters: {
         getPlantById: (state) => (id: string) => {
             return state.plants.find(p => p.id === id);
         },
         getPlantSpeciesById: (state) => (id: string) => {
-            console.debug('requesting plant species with id', id);
-            console.debug('plant species', state.plantSpecies);
             return state.plantSpecies.find(ps => ps.id === id);
         },
     },
     mutations: {
+        toggleMobileMenu(state) {
+            state.showMobileMenu = !state.showMobileMenu;
+        },
+        closeAddPlantModal(state) {
+            state.showAddPlantModal = false;
+        },
+        openAddPlantModal(state) {
+            state.showAddPlantModal = true;
+        },
+
         setPlants(state, payload) {
             state.plants = payload;
         },
@@ -44,6 +55,9 @@ export default new Vuex.Store({
         },
         setPlantSpecies(state, payload) {
             state.plantSpecies = payload;
+        },
+        setPlantLogTypes(state, payload) {
+            state.plantLogTypes = payload;
         }
     },
     actions: {
@@ -64,6 +78,21 @@ export default new Vuex.Store({
                 .then(res => {
                     context.commit('setPlantLogs', {plantId: payload.plantId, data: res.data});
                 })
+        },
+        async loadPlantLogTypes(context) {
+            Api.get('plant-log-type')
+                .then(res => {
+                    context.commit('setPlantLogTypes', res.data);
+                })
+        },
+        async savePlantLog(context, payload: { plantId: string; logType: string; log: string }) {
+            Api.post(`plant/${payload.plantId}/plant-log`, {
+                plantLogTypeId: payload.logType,
+                dateTime: new Date().toJSON(),
+                log: payload.log,
+            }).then(res => {
+                context.dispatch('loadPlantLogsForPlant', {plantId: payload.plantId});
+            });
         },
     },
     modules: {}

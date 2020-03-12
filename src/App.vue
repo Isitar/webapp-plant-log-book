@@ -3,13 +3,13 @@
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                   data-target="menu">
+                   @click="toggleMobileNav()" :class="{'is-active': showMobileMenu}">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
             </div>
-            <div class="navbar-menu" id="menu">
+            <div class="navbar-menu" id="menu" :class="{'is-active': showMobileMenu}">
                 <div class="navbar-end">
                     <router-link to="/" class="navbar-item">Home</router-link>
                     <router-link to="/plants" class="navbar-item">Plant List</router-link>
@@ -20,7 +20,7 @@
 
         <router-view/>
 
-        <footer class="footer" v-if="this.$store.state.showFooter">
+        <footer class="footer" v-if="showFooter">
             <div class="content has-text-centered">
                 <p>
                     <strong>Plant Log Book</strong> by <a href="https://github.com/isitar">Isitar</a>
@@ -30,29 +30,22 @@
     </div>
 </template>
 
-<script>
-    export default {}
+<script lang="ts">
+    import Vue from 'vue';
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // Get all "navbar-burger" elements
-        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-        // Check if there are any navbar burgers
-        if ($navbarBurgers.length > 0) {
-
-            // Add a click event on each of them
-            $navbarBurgers.forEach(burger => {
-                burger.addEventListener('click', () => {
-
-                    // Get the target from the "data-target" attribute
-                    const target = burger.dataset.target;
-                    const $target = document.getElementById(target);
-
-                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                    burger.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-                });
-            });
+    export default Vue.extend({
+        methods: {
+            toggleMobileNav() {
+                this.$store.commit('toggleMobileMenu');
+            },
+        },
+        computed: {
+            showMobileMenu() {
+                return this.$store.state.showMobileMenu;
+            },
+            showFooter() {
+                return this.$store.state.showFooter;
+            }
         }
     })
 </script>
@@ -63,7 +56,7 @@
         display: flex;
         flex-direction: column;
 
-        nav+* {
+        nav + * {
             flex: 1 1 auto;
         }
     }

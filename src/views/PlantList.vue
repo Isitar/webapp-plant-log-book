@@ -15,12 +15,14 @@
                         <tbody>
                         <tr v-for="plant in plants" :key="plant.id">
                             <td>{{plant.name}}</td>
-                            <td align="right">
+                            <td class="has-text-right">
+
                                 <router-link :to="{ name: 'plantDetail', params: {id: plant.id } }">
-                                <span class="icon">
-                                    <font-awesome-icon icon="eye"/>
-                                </span>
+                                    <span class="icon">
+                                        <font-awesome-icon icon="eye"/>
+                                    </span>
                                 </router-link>
+
                             </td>
                         </tr>
                         </tbody>
