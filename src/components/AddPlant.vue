@@ -66,8 +66,13 @@
                 this.$store.dispatch('createPlant', {
                     name: this.name,
                     plantSpeciesId: this.plantSpeciesId,
-                });
-                this.close();
+                })
+                    .then(() => {
+                        this.name = '';
+                        this.plantSpeciesId = '';
+                        this.close();
+                    });
+
             }
         },
         created(): void {

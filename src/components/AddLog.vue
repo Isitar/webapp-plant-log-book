@@ -73,8 +73,12 @@
                     plantId: this.plantId,
                     logType: this.logType,
                     log: this.log,
+                }).then(() => {
+                    this.logType = '';
+                    this.log = '';
+                    this.close();
                 });
-                this.close();
+
             }
         },
         created(): void {

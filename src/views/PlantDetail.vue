@@ -30,16 +30,20 @@
                 <div class="table-container">
                     <table class="table is-fullwidth">
                         <colgroup>
-                            <col style="width: 10%" />
+                            <col style="width: 20%"/>
+                            <col style="width: 10%"/>
+                            <col/>
                         </colgroup>
                         <thead>
                         <tr>
+                            <th>Datum</th>
                             <th>Typ</th>
                             <th>Log</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="log in plant.logs" :key="log.id">
+                        <tr v-for="log in sortedLogs" :key="log.id">
+                            <td>{{(new Date(log.dateTime)).toLocaleString('de-ch')}}</td>
                             <td>{{logTypeName(log.plantLogTypeId)}}</td>
                             <td class="nl2br">{{log.log}}</td>
                         </tr>
@@ -63,6 +67,7 @@
     import {PlantSpecies} from "@/models/PlantSpecies";
     import AddLog from '@/components/AddLog.vue';
     import {PlantLogType} from "@/models/PlantLogType";
+    import {PlantLog} from "@/models/PlantLog";
 
     export default Vue.extend({
         name: 'PlantDetail',
@@ -82,6 +87,13 @@
 
                 return plant;
             },
+            sortedLogs(): PlantLog[] {
+                if (null === this.plant) {
+                    return [];
+                }
+
+                return this.plant.logs?.concat().sort((a, b) => a.dateTime?.localeCompare(b.dateTime ?? 'Z') ?? -1).reverse() ?? [];
+            },
             plantSpecies(): PlantSpecies | null {
                 if (undefined === this.plant || null === this.plant) {
                     return null;
@@ -100,9 +112,9 @@
                 this.$store.commit('openAddPlantLogModal');
             },
 
-            logTypeName: function(id: string): string|null {
+            logTypeName: function (id: string): string | null {
                 const plantLogType = this.$store.state.plantLogTypes.find((plt: PlantLogType) => plt.id === id);
-                if (undefined === plantLogType){
+                if (undefined === plantLogType) {
                     return null;
                 }
                 return plantLogType.name;

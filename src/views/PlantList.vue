@@ -39,17 +39,17 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {mapState} from "vuex";
-    import {IPlantLogBookState} from "@/store/IPlantLogBookState";
+    import {mapGetters} from "vuex";
     import AddPlant from "@/components/AddPlant.vue";
 
 
     export default Vue.extend({
         name: 'PlantList',
         components: {AddPlant},
-        computed: mapState<IPlantLogBookState>({
-            plants: (state: IPlantLogBookState) => state.plants,
-        }),
+
+        computed: {
+            ...mapGetters({plants: 'getPlantsSorted'})
+        },
         methods: {
             showAddPlantModal(): void {
                 this.$store.commit('openAddPlantModal');
