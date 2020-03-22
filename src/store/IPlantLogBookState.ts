@@ -8,5 +8,8 @@ export interface IPlantLogBookState {
     plantLogTypes: PlantLogType[],
     showFooter: boolean,
     showMobileMenu: boolean,
+    showAside: boolean,
+    showPlantListInAside: boolean,
+    showAddPlantLogModal: boolean,
     showAddPlantModal: boolean,
 }

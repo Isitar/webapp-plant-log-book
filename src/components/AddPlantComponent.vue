@@ -4,18 +4,18 @@
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Add Log for {{plantName}}</p>
+                    <p class="modal-card-title">Add new plant</p>
                     <button class="delete" aria-label="close" @click="close"></button>
                 </header>
                 <section class="modal-card-body">
                     <div class="field">
-                        <label class="label">Log type</label>
+                        <label class="label">Plant Species</label>
                         <div class="control">
                             <div class="select">
-                                <select v-model="logType">
+                                <select v-model="plantSpeciesId">
                                     <option value="">None</option>
-                                    <option v-for="logType in logTypes" :key="logType.id" :value="logType.id">
-                                        {{logType.label}}
+                                    <option v-for="plantSpecies in species" :key="plantSpecies.id" :value="plantSpecies.id">
+                                        {{plantSpecies.label}}
                                     </option>
                                 </select>
                             </div>
@@ -23,9 +23,9 @@
                     </div>
 
                     <div class="field">
-                        <label class="label">Log</label>
+                        <label class="label">Name</label>
                         <div class="control">
-                            <textarea class="textarea" v-model="log"/>
+                            <input class="input" v-model="name"/>
                         </div>
                     </div>
                 </section>
@@ -40,47 +40,40 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {PlantLogType} from "@/models/PlantLogType";
+    import {PlantSpecies} from "@/models/PlantSpecies";
 
     export default Vue.extend({
-        name: "AddLogComponent",
-        props: {
-            plantId: String,
-        },
+        name: "AddPlantComponent",
         data: function () {
             return {
-                logType: '',
-                log: '',
+                plantSpeciesId: '',
+                name: '',
             };
         },
         computed: {
             show(): boolean {
-                return this.$store.state.showAddPlantLogModal;
+                return this.$store.state.showAddPlantModal;
             },
-            logTypes(): { id: string; label: string } {
-                return this.$store.state.plantLogTypes.map((plantLogType: PlantLogType) => {
-                    return {id: plantLogType.id, label: plantLogType.name};
+            species(): { id: string; label: string } {
+                return this.$store.state.plantSpecies.map((plantSpecies: PlantSpecies) => {
+                    return {id: plantSpecies.id, label: plantSpecies.name};
                 })
-            },
-            plantName(): string {
-                return this.$store.getters.getPlantById(this.plantId).name;
-            },
+            }
         },
         methods: {
             close() {
-                this.$store.commit('closeAddPlantLogModal');
+                this.$store.commit('closeAddPlantModal');
             },
             save() {
-                this.$store.dispatch('createPlantLog', {
-                    plantId: this.plantId,
-                    logType: this.logType,
-                    log: this.log,
+                this.$store.dispatch('createPlant', {
+                    name: this.name,
+                    plantSpeciesId: this.plantSpeciesId,
                 });
                 this.close();
             }
         },
         created(): void {
-            this.$store.dispatch('loadPlantLogTypes');
+            this.$store.dispatch('loadPlantSpecies');
         }
     });
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <article>
         <section class="section">
             <div class="container" v-if="plant">
                 <h1 class="title">{{plant.name}} <span class="tag is-info"
@@ -24,7 +24,7 @@
 
                 <h2 class="title">Logs</h2>
 
-                <button class="button" v-on:click="openModal()">Add Log</button>
+                <button class="button" @click="openAddLogModal()">Add Log</button>
 
                 <p class="content" v-if="!plant.logs || plant.logs.length === 0">No logs found</p>
                 <div class="table-container">
@@ -54,7 +54,7 @@
                 <progress class="progress is-primary" max="100" v-if="!plant"></progress>
             </div>
         </section>
-    </main>
+    </article>
 </template>
 
 <script lang="ts">
@@ -95,9 +95,8 @@
             },
         },
         methods: {
-            openModal: function () {
-                this.$store.commit('loadPlantLogTypes');
-                this.$store.commit('openAddPlantModal');
+            openAddLogModal: function () {
+                this.$store.commit('openAddPlantLogModal');
             },
 
             logTypeName: function(id: string): string|null {

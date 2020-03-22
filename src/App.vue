@@ -11,15 +11,26 @@
             </div>
             <div class="navbar-menu" id="menu" :class="{'is-active': showMobileMenu}">
                 <div class="navbar-end">
-                    <router-link to="/" class="navbar-item">Home</router-link>
-                    <router-link to="/plants" class="navbar-item">Plant List</router-link>
+                    <router-link to="/" class="navbar-item" @click.native="closeAllMenus">Home</router-link>
+                    <a class="navbar-item" @click.prevent="showPlantList">Plant List</a>
                     <router-link to="/about" class="navbar-item">About</router-link>
                 </div>
             </div>
         </nav>
+        <div id="content">
+            <transition name="slide-from-right">
+                <aside class="menu" v-if="showAside">
+                    <PlantListMenuList v-if="showPlantListInAside">
 
-        <router-view/>
-
+                    </PlantListMenuList>
+                </aside>
+            </transition>
+            <main class="main">
+                <transition name="fade">
+                    <router-view/>
+                </transition>
+            </main>
+        </div>
         <footer class="footer" v-if="showFooter">
             <div class="content has-text-centered">
                 <p>
@@ -32,11 +43,20 @@
 
 <script lang="ts">
     import Vue from 'vue';
+    import PlantListMenuList from "@/components/PlantListMenuList.vue";
 
     export default Vue.extend({
+        components: {PlantListMenuList},
         methods: {
             toggleMobileNav() {
                 this.$store.commit('toggleMobileMenu');
+            },
+            showPlantList() {
+                this.$store.commit('togglePlantListInAside');
+            },
+            closeAllMenus() {
+                this.$store.commit('closeMobileMenu');
+                this.$store.commit('closeAside');
             },
         },
         computed: {
@@ -45,7 +65,13 @@
             },
             showFooter() {
                 return this.$store.state.showFooter;
-            }
+            },
+            showAside() {
+                return this.$store.state.showAside;
+            },
+            showPlantListInAside() {
+                return this.$store.state.showPlantListInAside;
+            },
         }
     })
 </script>
@@ -58,6 +84,26 @@
 
         nav + * {
             flex: 1 1 auto;
+        }
+
+        #content {
+            display: flex;
+            flex-direction: column;
+            @include desktop {
+                flex-direction: row;
+            }
+
+            > aside {
+                padding: $box-padding;
+                flex: none;
+                @include desktop {
+                    order: 2;
+                }
+            }
+
+            > main {
+                flex: 1 0 auto;
+            }
         }
     }
 </style>
