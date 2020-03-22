@@ -47,7 +47,7 @@
                     </table>
                 </div>
 
-                <AddLogComponent :plant-id="plant.id"></AddLogComponent>
+                <AddLog :plant-id="plant.id"></AddLog>
 
             </div>
             <div class="container">
@@ -61,11 +61,12 @@
     import Vue from 'vue';
     import {Plant} from "@/models/Plant";
     import {PlantSpecies} from "@/models/PlantSpecies";
-    import AddLogComponent from '@/components/AddLogComponent.vue';
+    import AddLog from '@/components/AddLog.vue';
     import {PlantLogType} from "@/models/PlantLogType";
 
     export default Vue.extend({
         name: 'PlantDetail',
+        components: {AddLog},
         computed: {
             plant(): Plant | null {
                 const plant = this.$store.getters.getPlantById(this.$route.params.id);
@@ -107,6 +108,5 @@
                 return plantLogType.name;
             }
         },
-        components: {AddLogComponent}
     });
 </script>

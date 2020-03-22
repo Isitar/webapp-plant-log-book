@@ -18,7 +18,7 @@ export const Api = axios.create({
     }
 });
 
-export default new Vuex.Store({
+export default new Vuex.Store<IPlantLogBookState>({
     state: {
         plants: [],
         plantSpecies: [],
@@ -29,6 +29,10 @@ export default new Vuex.Store({
         showPlantListInAside: false,
         showAddPlantModal: false,
         showAddPlantLogModal: false,
+        confirmDialogOpen: false,
+        confirmDialogText: '',
+        confirmDialogSuccessCallback: null,
+        confirmDialogCancelCallback: null,
     } as IPlantLogBookState,
     getters: {
         getPlantById: (state) => (id: string): Plant | null => {
@@ -42,20 +46,20 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        closeMobileMenu(state: IPlantLogBookState) {
+        closeMobileMenu(state) {
             state.showMobileMenu = false;
         },
-        toggleMobileMenu(state: IPlantLogBookState) {
+        toggleMobileMenu(state) {
             state.showMobileMenu = !state.showMobileMenu;
         },
-        toggleAside(state: IPlantLogBookState) {
+        toggleAside(state) {
             state.showAside = !state.showAside;
         },
-        closeAside(state: IPlantLogBookState) {
+        closeAside(state) {
             state.showAside = false;
             state.showPlantListInAside = false;
         },
-        togglePlantListInAside(state: IPlantLogBookState) {
+        togglePlantListInAside(state) {
             if (state.showPlantListInAside) {
                 state.showAside = false;
                 state.showPlantListInAside = false;
@@ -66,23 +70,23 @@ export default new Vuex.Store({
                 state.showPlantListInAside = true;
             }
         },
-        closeAddPlantModal(state: IPlantLogBookState) {
+        closeAddPlantModal(state) {
             state.showAddPlantModal = false;
         },
-        openAddPlantModal(state: IPlantLogBookState) {
+        openAddPlantModal(state) {
             state.showAddPlantModal = true;
         },
-        closeAddPlantLogModal(state: IPlantLogBookState) {
+        closeAddPlantLogModal(state) {
             state.showAddPlantLogModal = false;
         },
-        openAddPlantLogModal(state: IPlantLogBookState) {
+        openAddPlantLogModal(state) {
             state.showAddPlantLogModal = true;
         },
 
-        setPlants(state: IPlantLogBookState, payload: Plant[]) {
+        setPlants(state, payload: Plant[]) {
             state.plants = payload;
         },
-        setPlantLogs(state: IPlantLogBookState, payload: { plantId: string; data: PlantLog[] }) {
+        setPlantLogs(state, payload: { plantId: string; data: PlantLog[] }) {
             const plant = state.plants.find(p => p.id === payload.plantId);
             if (undefined === plant) {
                 return;
@@ -90,12 +94,21 @@ export default new Vuex.Store({
             plant.logs = payload.data;
             state.plants = [...state.plants.filter(p => p.id !== plant.id), plant];
         },
-        setPlantSpecies(state: IPlantLogBookState, payload: PlantSpecies[]) {
+        setPlantSpecies(state, payload: PlantSpecies[]) {
             state.plantSpecies = payload;
         },
-        setPlantLogTypes(state: IPlantLogBookState, payload: PlantLogType[]) {
+        setPlantLogTypes(state, payload: PlantLogType[]) {
             state.plantLogTypes = payload;
-        }
+        },
+        confirmDialog(state, payload: { text: string; successCallback: () => void; cancelCallback: () => void }) {
+            state.confirmDialogText = payload.text;
+            state.confirmDialogSuccessCallback = payload.successCallback;
+            state.confirmDialogCancelCallback = payload.cancelCallback;
+            state.confirmDialogOpen = true;
+        },
+        closeConfirmDialog(state) {
+            state.confirmDialogOpen = false;
+        },
     },
     actions: {
         async loadPlants(context) {

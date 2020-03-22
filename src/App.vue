@@ -38,15 +38,17 @@
                 </p>
             </div>
         </footer>
+        <ConfirmDialog></ConfirmDialog>
     </div>
 </template>
 
 <script lang="ts">
     import Vue from 'vue';
     import PlantListMenuList from "@/components/PlantListMenuList.vue";
+    import ConfirmDialog from "@/components/ConfirmDialog.vue";
 
     export default Vue.extend({
-        components: {PlantListMenuList},
+        components: {PlantListMenuList, ConfirmDialog},
         methods: {
             toggleMobileNav() {
                 this.$store.commit('toggleMobileMenu');

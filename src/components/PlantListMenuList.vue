@@ -27,7 +27,6 @@
     export default Vue.extend({
         name: "PlantListMenuList", methods: {
             close(): void {
-                console.log('in close');
                 this.$store.commit('togglePlantListInAside');
             },
             isActive(id: string): boolean {

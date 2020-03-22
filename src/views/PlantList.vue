@@ -33,7 +33,7 @@
                 </div>
             </div>
         </section>
-        <AddPlantComponent></AddPlantComponent>
+        <AddPlant></AddPlant>
     </article>
 </template>
 
@@ -41,12 +41,12 @@
     import Vue from 'vue';
     import {mapState} from "vuex";
     import {IPlantLogBookState} from "@/store/IPlantLogBookState";
-    import AddPlantComponent from "@/components/AddPlantComponent.vue";
+    import AddPlant from "@/components/AddPlant.vue";
 
 
     export default Vue.extend({
         name: 'PlantList',
-        components: {AddPlantComponent},
+        components: {AddPlant},
         computed: mapState<IPlantLogBookState>({
             plants: (state: IPlantLogBookState) => state.plants,
         }),
@@ -55,7 +55,11 @@
                 this.$store.commit('openAddPlantModal');
             },
             deletePlant(id: string): void {
-                this.$store.dispatch('deletePlant', id);
+                this.$store.commit('confirmDialog', {
+                    text: 'Do you want to delete the plant? This action cannot be undone.',
+                    successCallback: () => this.$store.dispatch('deletePlant', id),
+                    cancelCallback: null,
+                });
             },
         },
         created(): void {

@@ -12,4 +12,9 @@ export interface IPlantLogBookState {
     showPlantListInAside: boolean,
     showAddPlantLogModal: boolean,
     showAddPlantModal: boolean,
+
+    confirmDialogOpen: boolean,
+    confirmDialogText: string,
+    confirmDialogSuccessCallback: (() => void) | null,
+    confirmDialogCancelCallback: (() => void) | null,
 }
