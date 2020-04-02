@@ -19,7 +19,7 @@
         </nav>
         <div id="content">
             <transition name="slide-from-right">
-                <aside class="menu" v-if="showAside">
+                <aside class="menu has-background-light" v-if="showAside" >
                     <PlantListMenuList v-if="showPlantListInAside">
 
                     </PlantListMenuList>
@@ -89,6 +89,7 @@
         }
 
         #content {
+            position: relative;
             display: flex;
             flex-direction: column;
             @include desktop {
@@ -100,6 +101,13 @@
                 flex: none;
                 @include desktop {
                     order: 2;
+                    position: absolute;
+                    right: 0;
+                    height: 100%;
+                    > * {
+                        position: sticky;
+                        top: $box-padding;
+                    }
                 }
             }
 
